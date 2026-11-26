@@ -362,7 +362,7 @@ export default function TaskBoard({ workGroupId }: TaskBoardProps) {
               </Tabs>
             </div>
             
-            <div className={cn("hidden lg:grid lg:grid-cols-3 lg:grid-rows-[minmax(0,1fr)] gap-6 w-full h-full min-h-0 pb-4", !isLargeScreen && "lg:grid")}>
+            <div className={cn("hidden lg:grid lg:grid-cols-3 lg:grid-rows-[minmax(0,1fr)] gap-3 w-full h-full min-h-0 pb-4", !isLargeScreen && "lg:grid")}>
               {statuses.map((s) => (
                 <TaskColumn
                   key={s}

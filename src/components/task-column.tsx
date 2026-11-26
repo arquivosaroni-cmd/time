@@ -190,7 +190,7 @@ export default function TaskColumn({ id, title, tasks, onStatusChange, onStartEd
           {sortedTasks.length}
         </Badge>
       </div>
-      <ScrollArea className="p-3 bg-card/20 rounded-b-lg flex-1 min-h-0">
+      <ScrollArea className="p-2 bg-card/20 rounded-b-lg flex-1 min-h-0">
         {content}
       </ScrollArea>
     </div>
