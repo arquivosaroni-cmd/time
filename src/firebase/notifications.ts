@@ -63,6 +63,7 @@ export function setupForegroundMessageListener(messaging: Messaging): (() => voi
         new Notification(payload.notification?.title || 'Time', {
           body: payload.notification?.body,
           icon: '/icon-192x192.png',
+          badge: '/badge-trophy.png',
           tag: payload.data?.taskId || 'foreground-update',
           renotify: false
         } as any);

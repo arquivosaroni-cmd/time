@@ -77,7 +77,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-background overflow-hidden">
       <Header selectedWorkGroupId={selectedWorkGroupId} onWorkGroupChange={handleWorkGroupChange} />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 min-h-0 overflow-hidden">
         <div className="w-full max-w-7xl mx-auto h-full">
           {selectedWorkGroupId ? (
             <TaskBoard workGroupId={selectedWorkGroupId} />

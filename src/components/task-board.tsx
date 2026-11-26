@@ -306,7 +306,7 @@ export default function TaskBoard({ workGroupId }: TaskBoardProps) {
         )}
       </div>
 
-      <div className="flex-1 px-4 sm:px-6 lg:px-8 pb-4 overflow-y-auto overflow-x-hidden">
+      <div className="flex-1 min-h-0 px-4 sm:px-6 lg:px-8 pb-4 overflow-y-auto lg:overflow-hidden overflow-x-hidden">
         {isLoading ? (
           <div className="flex flex-col gap-4">
             <Skeleton className="h-24 w-full"/>
@@ -326,14 +326,14 @@ export default function TaskBoard({ workGroupId }: TaskBoardProps) {
           >
             <div className={cn("lg:hidden h-full flex flex-col", isLargeScreen && "hidden")}>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as Status)} className="w-full h-full flex flex-col">
-                <TabsList className="grid w-full grid-cols-3 mb-4 sticky top-0 bg-background z-10 p-1 rounded-lg">
+                <TabsList className="grid w-full grid-cols-3 mb-4 sticky top-0 bg-background z-10 p-1 rounded-full">
                   {statuses.map((s) => {
                     const count = filterTasksByStatus(s).length;
                     return (
                       <TabsTrigger 
                         key={s} 
                         value={s} 
-                        className={cn("flex items-center justify-center gap-2 rounded-md transition-all", tabTriggerColors[s])}
+                        className={cn("flex items-center justify-center gap-2 rounded-full transition-all", tabTriggerColors[s])}
                       >
                         <span className="text-xs font-bold">{statusDisplayNames[s]}</span>
                         <span className="flex items-center justify-center bg-black/40 text-white text-[11px] font-black w-6 h-6 rounded-full">
@@ -362,7 +362,7 @@ export default function TaskBoard({ workGroupId }: TaskBoardProps) {
               </Tabs>
             </div>
             
-            <div className={cn("hidden lg:flex flex-row gap-6 w-full h-full overflow-x-auto pb-4 items-start flex-nowrap scrollbar-thin", !isLargeScreen && "lg:flex")}>
+            <div className={cn("hidden lg:grid lg:grid-cols-3 lg:grid-rows-[minmax(0,1fr)] gap-6 w-full h-full min-h-0 pb-4", !isLargeScreen && "lg:grid")}>
               {statuses.map((s) => (
                 <TaskColumn
                   key={s}

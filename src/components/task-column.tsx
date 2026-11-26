@@ -33,9 +33,9 @@ const statusColors: Record<Status, string> = {
 };
 
 const badgeStatusColors: Record<Status, string> = {
-  Pendente: "text-white border-orange-500 bg-orange-500",
-  "Em Produção": "text-white border-yellow-500 bg-yellow-500",
-  Finalizado: "text-white border-green-500 bg-green-500",
+  Pendente: "text-background border-orange-500 bg-orange-500",
+  "Em Produção": "text-background border-yellow-500 bg-yellow-500",
+  Finalizado: "text-background border-green-500 bg-green-500",
 };
 
 const statusDisplayNames: Record<Status, string> = {
@@ -80,7 +80,7 @@ export default function TaskColumn({ id, title, tasks, onStatusChange, onStartEd
     <div 
       ref={setNodeRef} 
       className={cn(
-        "h-full min-h-[150px] transition-colors duration-200",
+        "min-h-full transition-colors duration-200",
         isOver && "bg-primary/5 rounded-lg border-2 border-dashed border-primary/20"
       )}
     >
@@ -181,16 +181,16 @@ export default function TaskColumn({ id, title, tasks, onStatusChange, onStartEd
   }
 
   return (
-    <div className="flex flex-col h-full w-full md:w-[320px] lg:w-[350px] shrink-0">
-      <div className="flex items-center justify-between p-3 rounded-t-lg bg-card/40 border-b">
+    <div className="flex flex-col h-full min-h-0 w-full min-w-0">
+      <div className="flex items-center justify-between p-3 rounded-t-lg bg-card/40 border-b shrink-0">
         <h2 className={cn("font-bold text-xs uppercase tracking-widest", statusColors[title])}>
           {statusDisplayNames[title]}
         </h2>
-        <Badge variant="outline" className={cn("text-[10px] h-5 min-w-[20px] justify-center font-bold text-white", badgeStatusColors[title])}>
+        <Badge variant="outline" className={cn("text-[10px] h-5 min-w-[20px] justify-center font-bold text-background", badgeStatusColors[title])}>
           {sortedTasks.length}
         </Badge>
       </div>
-      <ScrollArea className="p-3 bg-card/20 rounded-b-lg flex-1">
+      <ScrollArea className="p-3 bg-card/20 rounded-b-lg flex-1 min-h-0">
         {content}
       </ScrollArea>
     </div>

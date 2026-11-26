@@ -19,6 +19,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: payload.notification.body,
     icon: '/icon-192x192.png',
+    badge: '/badge-trophy.png',
     tag: payload.data?.taskId || 'default-tag',
     renotify: false, // Do not vibrate/sound if the same tag is already shown
     data: {

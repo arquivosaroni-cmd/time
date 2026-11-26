@@ -37,7 +37,13 @@ export const onTaskChange = functions
           body: `A tarefa '${taskData.title}' foi criada.`,
           icon: "/icon-192x192.png",
         },
-        webpush: { fcmOptions: { link: `/?workgroup=${workgroupId}` } },
+        webpush: {
+          notification: {
+            icon: "/icon-192x192.png",
+            badge: "/badge-trophy.png",
+          },
+          fcmOptions: { link: `/?workgroup=${workgroupId}` },
+        },
       };
       return sendNotificationToGroup(workgroupId, payload, taskData.assignedUserId);
     }
@@ -63,7 +69,13 @@ export const onTaskChange = functions
           body: `${userName} atualizou '${taskData.title}' para '${taskData.status}'.`,
           icon: "/icon-192x192.png",
         },
-        webpush: { fcmOptions: { link: `/?workgroup=${workgroupId}` } },
+        webpush: {
+          notification: {
+            icon: "/icon-192x192.png",
+            badge: "/badge-trophy.png",
+          },
+          fcmOptions: { link: `/?workgroup=${workgroupId}` },
+        },
       };
       return sendNotificationToGroup(workgroupId, payload, changedByUserLog.userId);
     }
@@ -115,7 +127,13 @@ export const checkDeadlines = functions
               body: `Resta apenas 10% do prazo para a tarefa '${task.title}'!`,
               icon: "/icon-192x192.png",
             },
-            webpush: { fcmOptions: { link: `/?workgroup=${task.workGroupId}` } },
+            webpush: {
+              notification: {
+                icon: "/icon-192x192.png",
+                badge: "/badge-trophy.png",
+              },
+              fcmOptions: { link: `/?workgroup=${task.workGroupId}` },
+            },
           };
 
           await sendNotificationToGroup(task.workGroupId, payload);

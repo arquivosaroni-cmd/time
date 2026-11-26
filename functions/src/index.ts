@@ -97,6 +97,10 @@ async function sendNotificationToGroup(workgroupId: string, title: string, body:
       token,
       notification: { title, body },
       webpush: {
+        notification: {
+          icon: '/icon-192x192.png',
+          badge: '/badge-trophy.png'
+        },
         fcmOptions: {
           link: `/?workgroup=${workgroupId}`
         }
