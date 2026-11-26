@@ -1,0 +1,235 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user profile in the Time application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user profile."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's full name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "whatsapp": {
+          "type": "string",
+          "description": "The user's WhatsApp number."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user profile was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "createdAt"
+      ]
+    },
+    "WorkGroup": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WorkGroup",
+      "type": "object",
+      "description": "Represents a workgroup in the Time application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the workgroup."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the workgroup."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the workgroup."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N WorkGroup) The user who created the group."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the workgroup was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "ownerId",
+        "createdAt"
+      ]
+    },
+    "WorkGroupMembership": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WorkGroupMembership",
+      "type": "object",
+      "description": "Represents the membership of a user in a workgroup.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the workgroup membership."
+        },
+        "workGroupId": {
+          "type": "string",
+          "description": "Reference to WorkGroup. (Relationship: WorkGroup 1:N WorkGroupMembership) The workgroup the user is a member of."
+        },
+        "userProfileId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N WorkGroupMembership) The user who is a member of the group."
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the user in the workgroup (e.g., 'admin', 'member')."
+        }
+      },
+      "required": [
+        "id",
+        "workGroupId",
+        "userProfileId",
+        "role"
+      ]
+    },
+    "ServiceTask": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ServiceTask",
+      "type": "object",
+      "description": "Represents a service task within a workgroup.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the service task."
+        },
+        "workGroupId": {
+          "type": "string",
+          "description": "Reference to WorkGroup. (Relationship: WorkGroup 1:N ServiceTask) The workgroup the task belongs to."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the service task."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the service task."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the service task (e.g., 'production', 'finalized', 'pending')."
+        },
+        "assignedUserId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N ServiceTask) The user assigned to the service task."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the service task was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "workGroupId",
+        "title",
+        "description",
+        "status",
+        "assignedUserId",
+        "createdAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/profile",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profile information. Accessible only to the user. Uses path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/workgroups/{workgroupId}",
+        "definition": {
+          "entityName": "WorkGroup",
+          "schema": {
+            "$ref": "#/backend/entities/WorkGroup"
+          },
+          "description": "Stores workgroup information. Includes the ownerId of the group.",
+          "params": [
+            {
+              "name": "workgroupId",
+              "description": "The unique identifier of the workgroup."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/workgroups/{workgroupId}/memberships/{membershipId}",
+        "definition": {
+          "entityName": "WorkGroupMembership",
+          "schema": {
+            "$ref": "#/backend/entities/WorkGroupMembership"
+          },
+          "description": "Stores workgroup membership information, including user role (admin, member). Includes denormalized workgroupId and userProfileId for authorization independence.",
+          "params": [
+            {
+              "name": "workgroupId",
+              "description": "The unique identifier of the workgroup."
+            },
+            {
+              "name": "membershipId",
+              "description": "The unique identifier of the membership."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/workgroups/{workgroupId}/tasks/{taskId}",
+        "definition": {
+          "entityName": "ServiceTask",
+          "schema": {
+            "$ref": "#/backend/entities/ServiceTask"
+          },
+          "description": "Stores service tasks associated with a specific workgroup. Includes workGroupId for authorization independence.",
+          "params": [
+            {
+              "name": "workgroupId",
+              "description": "The unique identifier of the workgroup."
+            },
+            {
+              "name": "taskId",
+              "description": "The unique identifier of the task."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support a real-time service management application (Time), prioritizing secure and efficient data access. The structure emphasizes authorization independence and facilitates robust security rules.\n\n**Authorization Independence:**\n\n*   **WorkGroups:** The `WorkGroupMembership` subcollection denormalizes the relationship between users and workgroups. This eliminates the need for `get()` calls in security rules to determine group membership. Authorization checks can be performed directly on the `WorkGroupMembership` documents.\n*   **ServiceTasks:** The `ServiceTask` documents include the `workGroupId`, enabling direct association with a workgroup.  No `get()` calls are required to validate a `ServiceTask`'s parent.\n\n**QAPs (Rules are not Filters):**\n\n*   The structure separates user profiles from workgroups and tasks.  This allows for distinct security rules for each entity type, preventing unintended data exposure.\n*   Path-based ownership is used for user profiles (`/users/{userId}/profile`).\n\n**Structure and Segregation:**\n\n*   `/users/{userId}/profile`: Stores user profile information, accessible only to the user and potentially admins (if an admin role is implemented via a separate collection). This follows the Private Data access modeling pattern.\n*   `/workgroups/{workgroupId}`: Stores workgroup information. The `ownerId` field indicates the group creator.  A subcollection `/workgroups/{workgroupId}/memberships/{membershipId}` manages user roles within the group (admin, member). This uses the Membership Map collaborative data access pattern.\n*   `/workgroups/{workgroupId}/tasks/{taskId}`: Stores service tasks associated with a specific workgroup. Each task includes `assignedUserId` and `status`.  This segregates tasks by workgroup, simplifying security rules and enabling efficient querying.\n\nThis design enables secure `list` operations by ensuring that security rules can be applied directly to each collection without requiring complex filtering based on data content."
+  }
+}

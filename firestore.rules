@@ -1,0 +1,82 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // HELPER FUNCTIONS
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isWorkGroupAdmin(workgroupId) {
+      let membershipPath = /databases/$(database)/documents/workgroups/$(workgroupId)/memberships/$(request.auth.uid);
+      return isSignedIn() && exists(membershipPath) && get(membershipPath).data.role == 'admin';
+    }
+    
+    function isWorkGroupOwner(workgroupId) {
+      let workgroup = get(/databases/$(database)/documents/workgroups/$(workgroupId));
+      return isSignedIn() && workgroup.data.ownerId == request.auth.uid;
+    }
+
+    function isWorkGroupAdminOrOwner(workgroupId) {
+      return isWorkGroupOwner(workgroupId) || isWorkGroupAdmin(workgroupId);
+    }
+    
+    function isMember(workgroupId) {
+      return exists(/databases/$(database)/documents/workgroups/$(workgroupId)/memberships/$(request.auth.uid));
+    }
+
+    // USER PROFILE RULES
+    match /users/{userId} {
+      allow get, list: if isSignedIn(); // Allow searching for users
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+
+      match /profile/{profileId} {
+        allow get, create, update: if isOwner(userId);
+        allow delete: if false;
+      }
+    }
+
+    // WORKGROUP RULES
+    match /workgroups/{workgroupId} {
+      allow get: if isMember(workgroupId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow update: if isWorkGroupAdminOrOwner(workgroupId);
+      allow delete: if isWorkGroupOwner(workgroupId);
+      
+      // Membership Rules
+      match /memberships/{membershipId} {
+        allow get, list: if isMember(workgroupId);
+        // Allow creation if the user is an admin/owner OR if the user is adding themselves.
+        allow create: if isWorkGroupAdminOrOwner(workgroupId) || (request.auth.uid == membershipId && request.resource.data.userProfileId == request.auth.uid);
+        allow update: if isWorkGroupAdminOrOwner(workgroupId);
+        allow delete: if isWorkGroupAdminOrOwner(workgroupId);
+      }
+
+      // Task Rules
+      match /tasks/{taskId} {
+        allow read, write: if isMember(workgroupId);
+      }
+    }
+
+    // ARCHIVED TASKS RULES
+    match /archived_tasks/{taskId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn(); // Allow creating archived tasks
+      allow update, delete: if false; // Only server-side logic can modify archives
+    }
+
+    // Denormalized collection for querying user's workgroups efficiently.
+    match /workgroup_memberships/{membershipId} {
+        allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+        allow list: if isSignedIn();
+        allow create: if isWorkGroupAdminOrOwner(request.resource.data.workGroupId) || request.auth.uid == request.resource.data.userId;
+        allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid || isWorkGroupAdminOrOwner(resource.data.workGroupId);
+    }
+  }
+}

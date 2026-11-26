@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .dark {
+    --background: 220 13% 9%; /* Dark Gray */
+    --foreground: 210 20% 98%;
+    --card: 220 13% 9%; /* Dark Gray */
+    --card-foreground: 210 20% 98%;
+    --popover: 220 13% 9%; /* Dark Gray */
+    --popover-foreground: 210 20% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 10% 15%; /* Darker Gray */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 220 10% 15%; /* Darker Gray */
+    --muted-foreground: 215.4 16.3% 56.9%;
+    --accent: 220 10% 15%; /* Darker Gray */
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 10% 20%; /* Darker Gray */
+    --input: 220 10% 20%; /* Darker Gray */
+    --ring: 220 10% 20%; /* Darker Gray */
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --tab-pending: 39 100% 50%; /* orange-400 */
+    --tab-pending-foreground: 215 28% 17%;
+    --tab-production: 60 95% 50%; /* yellow-400 */
+    --tab-production-foreground: 215 28% 17%;
+    --tab-finalized: 142 76% 36%; /* green-400 */
+    --tab-finalized-foreground: 210 40% 98%;
+  }
+
+  :root {
+    --background: 220 13% 9%; /* Dark Gray */
+    --foreground: 210 20% 98%;
+    --card: 220 13% 9%; /* Dark Gray */
+    --card-foreground: 210 20% 98%;
+    --popover: 220 13% 9%; /* Dark Gray */
+    --popover-foreground: 210 20% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 10% 15%; /* Darker Gray */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 220 10% 15%; /* Darker Gray */
+    --muted-foreground: 215.4 16.3% 56.9%;
+    --accent: 220 10% 15%; /* Darker Gray */
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 10% 20%; /* Darker Gray */
+    --input: 220 10% 20%; /* Darker Gray */
+    --ring: 220 10% 20%; /* Darker Gray */
+    --radius: 0.5rem;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --tab-pending: 39 100% 50%; /* orange-400 */
+    --tab-pending-foreground: 215 28% 17%;
+    --tab-production: 60 95% 50%; /* yellow-400 */
+    --tab-production-foreground: 215 28% 17%;
+    --tab-finalized: 142 76% 36%; /* green-400 */
+    --tab-finalized-foreground: 210 40% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Hide scrollbar by default */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom Scrollbar - Only for devices that support hover (i.e., desktops) */
+@media (hover: hover) {
+  ::-webkit-scrollbar {
+    display: block; /* Show scrollbar on desktop */
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--secondary));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}

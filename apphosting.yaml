@@ -1,0 +1,10 @@
+# Settings to manage and configure a Firebase App Hosting backend.
+# https://firebase.google.com/docs/app-hosting/configure
+
+runtime: nodejs22
+runConfig:
+  # Aumentado para 2048MiB para garantir build e rollout estáveis com Next.js 15 e Genkit
+  memory: 2048MiB
+  # Increase this value if you'd like to automatically spin up
+  # more instances in response to increased traffic.
+  maxInstances: 2
